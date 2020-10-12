@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  piwig:
+    build: .
+    image: freemo/piwigo:latest
+    ports:
+      - 80:80
+      - 9443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - piwig-conf:/config
+
+volumes:
+  piwig-conf:
