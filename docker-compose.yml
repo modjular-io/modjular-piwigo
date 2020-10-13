@@ -2,9 +2,9 @@ version: '3'
 
 services:
 
-  piwig:
+  modjular-piwigo:
     build: .
-    image: freemo/piwigo:latest
+    image: modjular/modjular-piwigo:latest
     ports:
       - 80:80
       - 9443:443

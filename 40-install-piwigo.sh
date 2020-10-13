@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# make our folders
+mkdir -p \
+	/config/www/gallery
+
+# install piwigo
+if [ ! -f "/config/www/gallery/index.php" ]; then
+	unzip -q /piwigo/piwigo.zip  -d /tmp
+	mv /tmp/piwigo/* /config/www/gallery
+	rm -rf /tmp/piwigo
+fi
+
+# copy config
+[[ ! -f "/config/www/gallery/local/config/config.inc.php" ]] && \
+	cp /config/www/gallery/include/config_default.inc.php \
+	/config/www/gallery/local/config/config.inc.php
+
+exit 0
