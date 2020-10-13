@@ -40,12 +40,16 @@ RUN echo "**** install packages ****" && \
       re2c \
       unzip \
       wget && \
-    echo "**** download piwigo ****" && \
-    PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]') && \
-    mkdir /piwigo && \
-    curl -o /piwigo/piwigo.zip -L "http://piwigo.org/download/dlcounter.php?code=${PIWIGO_RELEASE}" && \
     apt-get clean && \
     rm -r /var/lib/apt/lists/*
+
+RUN PIWIGO_RELEASE=$(curl -sX GET "https://api.github.com/repos/Piwigo/Piwigo/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]') && \
+    curl -o /tmp/piwigo.zip -L "http://piwigo.org/download/dlcounter.php?code=${PIWIGO_RELEASE}" && \
+    unzip -q /tmp/piwigo.zip  -d /tmp && \
+    mkdir -p /config/www/gallery && \
+    mv /tmp/piwigo/* /config/www/gallery && \
+    rm -rf /tmp/piwigo*
+
 
 RUN sed -i 's/^[[:space:]]*[;]*[[:space:]]*memory_limit[[:space:]]*=[[:space:]]*.*/memory_limit = 256M/' /etc/php/7.3/fpm/php.ini && \
     sed -i 's/^[[:space:]]*[;]*[[:space:]]*cgi.fix_pathinfo[[:space:]]*=[[:space:]]*.*/cgi.fix_pathinfo = 0/' /etc/php/7.3/fpm/php.ini && \
@@ -59,4 +63,4 @@ COPY 39-start-fpm.sh /docker-entrypoint.d/
 
 # ports and volumes
 EXPOSE 80 443
-VOLUME ["/config", "/pictures"]
+VOLUME ["/config/log", "/config/www/gallery/galleries/", "/config/www/gallery/_data/", "/config/www/gallery/upload/", "/config/www/gallery/plugins/", "/config/www/gallery/themes/", "/config/www/gallery/template-extension/", "/config/www/gallery/local/", "/pictures"]
