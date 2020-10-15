@@ -1,16 +1,29 @@
-version: '3'
+version: '3.2'
 
 services:
-
-  modjular-piwigo:
-    build: .
+  app:
     image: modjular/modjular-piwigo:latest
+    build: .
     ports:
-      - 80:80
-      - 9443:443
+      - "80"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - piwig-conf:/config
+      - pictures:/pictures
+      - log:/config/log
+      - galleries:/config/www/gallery/galleries
+      - data:/config/www/gallery/_data
+      - upload:/config/www/gallery/upload
+      - plugins:/config/www/gallery/plugins
+      - themes:/config/www/gallery/themes
+      - template-extension:/config/www/gallery/template-extension
+      - local:/config/www/gallery/local
 
 volumes:
-  piwig-conf:
+  pictures:
+  log:
+  galleries:
+  data:
+  upload:
+  plugins:
+  themes:
+  template-extension:
+  local:
